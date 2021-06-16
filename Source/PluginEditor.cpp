@@ -12,8 +12,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTromboneAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p), tractUI(p)
+PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTromboneAudioProcessor& p, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p), valueTreeState(vts), processor (p), tractUI(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -29,6 +29,7 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	tongueX.setTextValueSuffix (" Tongue Index");
 	tongueX.setValue(1.0);
 	addAndMakeVisible (&tongueX);
+    tongueXAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "tongueX", tongueX));
 	tongueX.addListener(this);
 	
 	tongueY.setSliderStyle (Slider::LinearBarVertical);
@@ -38,6 +39,7 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	tongueY.setTextValueSuffix (" Tongue Diameter");
 	tongueY.setValue(1.0);
 	addAndMakeVisible (&tongueY);
+    tongueYAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "tongueY", tongueY));
 	tongueY.addListener(this);
 	
 	constrictionX.setSliderStyle (Slider::LinearBarVertical);

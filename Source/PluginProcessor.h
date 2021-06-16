@@ -72,6 +72,10 @@ public:
 
 private:
     //==============================================================================
+    AudioProcessorValueTreeState parameters;
+    std::atomic<float>* tongueXParameter = nullptr;
+    std::atomic<float>* tongueYParameter = nullptr;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PinkTromboneAudioProcessor)
 	t_tractProps tractProps;
 	Glottis *glottis;

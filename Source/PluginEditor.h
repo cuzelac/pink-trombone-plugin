@@ -20,7 +20,7 @@
 class PinkTromboneAudioProcessorEditor  : public AudioProcessorEditor, private Slider::Listener, private ToggleButton::Listener
 {
 public:
-    PinkTromboneAudioProcessorEditor (PinkTromboneAudioProcessor&);
+    PinkTromboneAudioProcessorEditor (PinkTromboneAudioProcessor&, AudioProcessorValueTreeState&);
     ~PinkTromboneAudioProcessorEditor();
 
     //==============================================================================
@@ -28,16 +28,22 @@ public:
     void resized() override;
 
 private:
+    AudioProcessorValueTreeState& valueTreeState;
+
 	void sliderValueChanged (Slider* slider) override;
 	void buttonClicked (Button* button) override;
 	void buttonStateChanged (Button* button) override;
-	
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PinkTromboneAudioProcessor& processor;
-	
-	Slider tongueX;
-	Slider tongueY;
+
+    Slider tongueX;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> tongueXAttachment;
+
+    Slider tongueY;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> tongueYAttachment;
+    
 	Slider constrictionX;
 	Slider constrictionY;
 	ToggleButton constrictionActive;

@@ -22,8 +22,21 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+    parameters(*this, nullptr, juce::Identifier("PinkTrombone"),
+               {
+                    std::make_unique<juce::AudioParameterFloat> ("tongueX",
+                                                                 "Tongue Index",
+                                                                 0.0f,
+                                                                 1.0f,
+                                                                 0.5f),
+                    std::make_unique<juce::AudioParameterFloat> ("tongueY",
+                                                                 "Tongue Diameter",
+                                                                 0.0f,
+                                                                 1.0f,
+                                                                 0.5f)
+                })
 {
 //	addParameter (tongueX = new AudioParameterFloat ("tonguex", // parameter ID
 //													 	"Tongue X", // parameter name
@@ -35,6 +48,8 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 //													 0.0f,   // minimum value
 //													 1.0f,   // maximum value
 //													 0.5f)); // default value
+    tongueXParameter = parameters.getRawParameterValue("tongueX");
+    tongueYParameter = parameters.getRawParameterValue("tongueY");
 	initializeTractProps(&this->tractProps, 44);
 }
 
@@ -208,10 +223,10 @@ void PinkTromboneAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 		}
 	}
 	
-	double tongueIndex = tongueX * ((double) (this->tract->tongueIndexUpperBound() - this->tract->tongueIndexLowerBound())) + this->tract->tongueIndexLowerBound();
+	double tongueIndex = *tongueXParameter * ((double) (this->tract->tongueIndexUpperBound() - this->tract->tongueIndexLowerBound())) + this->tract->tongueIndexLowerBound();
 	double innerTongueControlRadius = 2.05;
 	double outerTongueControlRadius = 3.5;
-	double tongueDiameter = tongueY * (outerTongueControlRadius - innerTongueControlRadius) + innerTongueControlRadius;
+	double tongueDiameter = *tongueYParameter * (outerTongueControlRadius - innerTongueControlRadius) + innerTongueControlRadius;
 	double constrictionMin = -2.0;
 	double constrictionMax = 2.0;
 	
@@ -247,7 +262,7 @@ bool PinkTromboneAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* PinkTromboneAudioProcessor::createEditor()
 {
-    return new PinkTromboneAudioProcessorEditor (*this);
+    return new PinkTromboneAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
