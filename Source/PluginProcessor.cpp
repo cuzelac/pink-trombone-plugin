@@ -27,36 +27,29 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
     parameters(*this, nullptr, juce::Identifier("PinkTrombone"),
                {
                     std::make_unique<juce::AudioParameterFloat> ("tongueX",
-                                                                 "Tongue Index",
+                                                                 "Tongue X",
                                                                  0.0f,
                                                                  1.0f,
                                                                  0.5f),
                     std::make_unique<juce::AudioParameterFloat> ("tongueY",
-                                                                 "Tongue Diameter",
+                                                                 "Tongue Y",
                                                                  0.0f,
                                                                  1.0f,
-                                                                 0.5f),
-					std::make_unique<juce::AudioParameterFloat>("constrictionX",
-																"Constriction X",
-																0.0f,
-																1.0f,
-																0.5f),
-					std::make_unique<juce::AudioParameterFloat>("constrictionY",
-																"Constriction Y",
-																0.0f,
-																1.0f,
-																0.5f),
-					std::make_unique<juce::AudioParameterBool>("constrictionActive",
-															   "Constriction Active?",
-															   false)
+                                                                 0.5f)
                 })
 {
+//	addParameter (tongueX = new AudioParameterFloat ("tonguex", // parameter ID
+//													 	"Tongue X", // parameter name
+//													 	0.0f,   // minimum value
+//													 	1.0f,   // maximum value
+//													 	0.5f)); // default value
+//	addParameter (tongueY = new AudioParameterFloat ("tonguey", // parameter ID
+//													 "Tongue Y", // parameter name
+//													 0.0f,   // minimum value
+//													 1.0f,   // maximum value
+//													 0.5f)); // default value
     tongueXParameter = parameters.getRawParameterValue("tongueX");
     tongueYParameter = parameters.getRawParameterValue("tongueY");
-	constrictionXParameter = parameters.getRawParameterValue("constrictionX");
-	constrictionYParameter = parameters.getRawParameterValue("constrictionY");
-	constrictionActiveParameter = parameters.getRawParameterValue("constrictionActive");
-
 	initializeTractProps(&this->tractProps, 44);
 }
 
@@ -230,16 +223,16 @@ void PinkTromboneAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 		}
 	}
 	
-	double tongueIndex = *tongueXParameter * ((double) (this->tract->tongueIndexUpperBound() - this->tract->tongueIndexLowerBound())) + this->tract->tongueIndexLowerBound();
+	double tongueIndex = tongueX * ((double) (this->tract->tongueIndexUpperBound() - this->tract->tongueIndexLowerBound())) + this->tract->tongueIndexLowerBound();
 	double innerTongueControlRadius = 2.05;
 	double outerTongueControlRadius = 3.5;
-	double tongueDiameter = *tongueYParameter * (outerTongueControlRadius - innerTongueControlRadius) + innerTongueControlRadius;
+	double tongueDiameter = tongueY * (outerTongueControlRadius - innerTongueControlRadius) + innerTongueControlRadius;
 	double constrictionMin = -2.0;
 	double constrictionMax = 2.0;
 	
-	double constrictionIndex = *constrictionXParameter * (double) this->tract->getTractIndexCount();
-	double constrictionDiameter = *constrictionYParameter * (constrictionMax - constrictionMin) + constrictionMin;
-	if (*constrictionActiveParameter == false) {
+	double constrictionIndex = this->constrictionX * (double) this->tract->getTractIndexCount();
+	double constrictionDiameter = this->constrictionY * (constrictionMax - constrictionMin) + constrictionMin;
+	if (this->constrictionActive == false) {
 		constrictionDiameter = constrictionMax;
 	} else {
 		this->fricativeIntensity += 0.1; // TODO ex recto

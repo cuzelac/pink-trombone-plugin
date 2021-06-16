@@ -17,7 +17,7 @@
 //==============================================================================
 /**
 */
-class PinkTromboneAudioProcessorEditor  : public AudioProcessorEditor, private AudioProcessorValueTreeState::Listener
+class PinkTromboneAudioProcessorEditor  : public AudioProcessorEditor, private Slider::Listener, private ToggleButton::Listener
 {
 public:
     PinkTromboneAudioProcessorEditor (PinkTromboneAudioProcessor&, AudioProcessorValueTreeState&);
@@ -30,13 +30,14 @@ public:
 private:
     AudioProcessorValueTreeState& valueTreeState;
 
-	void parameterChanged(const String& parameterID, float newValue) override;
+	void sliderValueChanged (Slider* slider) override;
+	void buttonClicked (Button* button) override;
+	void buttonStateChanged (Button* button) override;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PinkTromboneAudioProcessor& processor;
 
-	// Configure UI elements and attach them to the ValueTreeState datastore
     Slider tongueX;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> tongueXAttachment;
 
@@ -44,14 +45,8 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> tongueYAttachment;
     
 	Slider constrictionX;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> constrictionXAttachment;
-
 	Slider constrictionY;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> constrictionYAttachment;
-
 	ToggleButton constrictionActive;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> constrictionActiveAttachment;
-	
 	ToggleButton muteAudio;
 	TractUI tractUI;
 

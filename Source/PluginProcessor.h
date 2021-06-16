@@ -60,20 +60,21 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 	
 	//=== Audio Parameters
+	float tongueX = 0.0;
+	float tongueY = 0.0;
+	float constrictionX = 0.0;
+	float constrictionY = 0.0;
 	float fricativeIntensity = 0.0;
 	bool muteAudio = false;
+	bool constrictionActive = false;
 	
 	t_tractProps *getTractProps();
 
 private:
     //==============================================================================
-	// tutorial: https://docs.juce.com/master/tutorial_audio_processor_value_tree_state.html
     AudioProcessorValueTreeState parameters;
     std::atomic<float>* tongueXParameter = nullptr;
     std::atomic<float>* tongueYParameter = nullptr;
-	std::atomic<float>* constrictionXParameter = nullptr;
-	std::atomic<float>* constrictionYParameter = nullptr;
-	std::atomic<float>* constrictionActiveParameter = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PinkTromboneAudioProcessor)
 	t_tractProps tractProps;
