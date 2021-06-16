@@ -25,7 +25,9 @@ private:
 	
 	double sampleRate;
 	double timeInWaveform;
+  // TODO: update frequency here? (X-axis of voicebox control)
 	double frequency, oldFrequency, newFrequency, smoothFrequency,UIFrequency;
+  // TODO: update tenseness here? (Y-axis of voicebox control)
 	double oldTenseness, newTenseness, UITenseness;
 	double waveformLength;
 	double Rd;
@@ -40,7 +42,7 @@ private:
 	double intensity, loudness;
 	double vibratoAmount;
 	double vibratoFrequency;
-	bool autoWobble;
+	bool autoWobble; // TODO: Toggle vibrato here
 	bool isTouched;
 	bool alwaysVoice;
 };
