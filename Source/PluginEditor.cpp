@@ -48,7 +48,8 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	constrictionX.setPopupDisplayEnabled (true, false, this);
 	constrictionX.setTextValueSuffix (" Constriction X");
 	constrictionX.setValue(1.0);
-//	addAndMakeVisible (&constrictionX);
+	addAndMakeVisible (&constrictionX);
+	constrictionXAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "constrictionX", constrictionX));
 	constrictionX.addListener(this);
 	
 	constrictionY.setSliderStyle (Slider::LinearBarVertical);
@@ -57,7 +58,8 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	constrictionY.setPopupDisplayEnabled (true, false, this);
 	constrictionY.setTextValueSuffix (" Constriction Y");
 	constrictionY.setValue(1.0);
-//	addAndMakeVisible (&constrictionY);
+	addAndMakeVisible (&constrictionY);
+	constrictionYAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "constrictionY", constrictionY));
 	constrictionY.addListener(this);
 	
 	constrictionActive.setButtonText("Constriction Active");
