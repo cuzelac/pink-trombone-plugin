@@ -35,7 +35,20 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
                                                                  "Tongue Diameter",
                                                                  0.0f,
                                                                  1.0f,
-                                                                 0.5f)
+                                                                 0.5f),
+					std::make_unique<juce::AudioParameterFloat>("constrictionX",
+																"Constriction X",
+																0.0f,
+																1.0f,
+																0.5f),
+					std::make_unique<juce::AudioParameterFloat>("constrictionY",
+																"Constriction Y",
+																0.0f,
+																1.0f,
+																0.5f),
+					std::make_unique<juce::AudioParameterBool>("constrictionActive",
+															   "Constriction Active?",
+															   false)
                 })
 {
 //	addParameter (tongueX = new AudioParameterFloat ("tonguex", // parameter ID
@@ -50,6 +63,10 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 //													 0.5f)); // default value
     tongueXParameter = parameters.getRawParameterValue("tongueX");
     tongueYParameter = parameters.getRawParameterValue("tongueY");
+	constrictionXParameter = parameters.getRawParameterValue("constrictionX");
+	constrictionYParameter = parameters.getRawParameterValue("constrictionY");
+	constrictionActiveParameter = parameters.getRawParameterValue("constrictionActive");
+
 	initializeTractProps(&this->tractProps, 44);
 }
 
@@ -230,9 +247,9 @@ void PinkTromboneAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 	double constrictionMin = -2.0;
 	double constrictionMax = 2.0;
 	
-	double constrictionIndex = this->constrictionX * (double) this->tract->getTractIndexCount();
-	double constrictionDiameter = this->constrictionY * (constrictionMax - constrictionMin) + constrictionMin;
-	if (this->constrictionActive == false) {
+	double constrictionIndex = *constrictionXParameter * (double) this->tract->getTractIndexCount();
+	double constrictionDiameter = *constrictionYParameter * (constrictionMax - constrictionMin) + constrictionMin;
+	if (*constrictionActiveParameter == false) {
 		constrictionDiameter = constrictionMax;
 	} else {
 		this->fricativeIntensity += 0.1; // TODO ex recto

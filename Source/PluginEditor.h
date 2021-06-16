@@ -30,6 +30,7 @@ public:
 private:
     AudioProcessorValueTreeState& valueTreeState;
 
+	// TODO: remove all references to pre-ValueTreeState callbacks and variables
 	void sliderValueChanged (Slider* slider) override;
 	void buttonClicked (Button* button) override;
 	void buttonStateChanged (Button* button) override;
@@ -45,8 +46,14 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> tongueYAttachment;
     
 	Slider constrictionX;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> constrictionXAttachment;
+
 	Slider constrictionY;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> constrictionYAttachment;
+
 	ToggleButton constrictionActive;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> constrictionActiveAttachment;
+	
 	ToggleButton muteAudio;
 	TractUI tractUI;
 
