@@ -51,16 +51,6 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 															   false)
                 })
 {
-//	addParameter (tongueX = new AudioParameterFloat ("tonguex", // parameter ID
-//													 	"Tongue X", // parameter name
-//													 	0.0f,   // minimum value
-//													 	1.0f,   // maximum value
-//													 	0.5f)); // default value
-//	addParameter (tongueY = new AudioParameterFloat ("tonguey", // parameter ID
-//													 "Tongue Y", // parameter name
-//													 0.0f,   // minimum value
-//													 1.0f,   // maximum value
-//													 0.5f)); // default value
     tongueXParameter = parameters.getRawParameterValue("tongueX");
     tongueYParameter = parameters.getRawParameterValue("tongueY");
 	constrictionXParameter = parameters.getRawParameterValue("constrictionX");

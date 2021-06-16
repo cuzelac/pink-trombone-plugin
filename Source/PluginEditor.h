@@ -17,7 +17,7 @@
 //==============================================================================
 /**
 */
-class PinkTromboneAudioProcessorEditor  : public AudioProcessorEditor, private Slider::Listener, private ToggleButton::Listener
+class PinkTromboneAudioProcessorEditor  : public AudioProcessorEditor, private AudioProcessorValueTreeState::Listener
 {
 public:
     PinkTromboneAudioProcessorEditor (PinkTromboneAudioProcessor&, AudioProcessorValueTreeState&);
@@ -30,15 +30,13 @@ public:
 private:
     AudioProcessorValueTreeState& valueTreeState;
 
-	// TODO: remove all references to pre-ValueTreeState callbacks and variables
-	void sliderValueChanged (Slider* slider) override;
-	void buttonClicked (Button* button) override;
-	void buttonStateChanged (Button* button) override;
+	void parameterChanged(const String& parameterID, float newValue) override;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PinkTromboneAudioProcessor& processor;
 
+	// Configure UI elements and attach them to the ValueTreeState datastore
     Slider tongueX;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> tongueXAttachment;
 

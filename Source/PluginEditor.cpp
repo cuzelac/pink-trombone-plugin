@@ -23,34 +23,29 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	addAndMakeVisible(&tractUI);
 	
 	tongueX.setSliderStyle (Slider::LinearBarVertical);
-	tongueX.setRange(0.0, 1.0, 0.01);
 	tongueX.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
 	tongueX.setPopupDisplayEnabled (false, false, this);
 	tongueX.setTextValueSuffix (" Tongue Index");
-	tongueX.setValue(1.0);
 	addAndMakeVisible (&tongueX);
     tongueXAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "tongueX", tongueX));
-	tongueX.addListener(this);
-	
+	vts.addParameterListener("tongueX", this);
+
 	tongueY.setSliderStyle (Slider::LinearBarVertical);
-	tongueY.setRange(0.0, 1.0, 0.01);
 	tongueY.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
 	tongueY.setPopupDisplayEnabled (false, false, this);
 	tongueY.setTextValueSuffix (" Tongue Diameter");
-	tongueY.setValue(1.0);
 	addAndMakeVisible (&tongueY);
     tongueYAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "tongueY", tongueY));
-	tongueY.addListener(this);
-	
+	vts.addParameterListener("tongueY", this);
+
 	constrictionX.setSliderStyle (Slider::LinearBarVertical);
-	constrictionX.setRange(0.0, 1.0, 0.01);
 	constrictionX.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
 	constrictionX.setPopupDisplayEnabled (true, false, this);
 	constrictionX.setTextValueSuffix (" Constriction X");
 	constrictionX.setValue(1.0);
 	addAndMakeVisible (&constrictionX);
 	constrictionXAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "constrictionX", constrictionX));
-	constrictionX.addListener(this);
+	vts.addParameterListener("constrictionX", this);
 	
 	constrictionY.setSliderStyle (Slider::LinearBarVertical);
 	constrictionY.setRange(0.0, 1.0, 0.01);
@@ -60,16 +55,16 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	constrictionY.setValue(1.0);
 	addAndMakeVisible (&constrictionY);
 	constrictionYAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "constrictionY", constrictionY));
-	constrictionY.addListener(this);
+	vts.addParameterListener("constrictionY", this);
 	
 	constrictionActive.setButtonText("Constriction Active");
 	addAndMakeVisible(&constrictionActive);
 	constrictionActiveAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(valueTreeState, "constrictionActive", constrictionActive));
-	constrictionActive.addListener(this);
+	vts.addParameterListener("constrictionActive", this);
 	
 	muteAudio.setButtonText("Mute");
 //	addAndMakeVisible(&muteAudio);
-	muteAudio.addListener(this);
+//	muteAudio.addListener(this);
 }
 
 PinkTromboneAudioProcessorEditor::~PinkTromboneAudioProcessorEditor()
@@ -95,19 +90,7 @@ void PinkTromboneAudioProcessorEditor::resized()
 	tractUI.setSize(getWidth(), getHeight());
 }
 
-void PinkTromboneAudioProcessorEditor::sliderValueChanged (Slider* slider)
+void PinkTromboneAudioProcessorEditor::parameterChanged(const String& parameterID, float newValue)
 {
-	processor.tongueX = tongueX.getValue();
-	processor.tongueY = tongueY.getValue();
-	processor.constrictionX = constrictionX.getValue();
-	processor.constrictionY = constrictionY.getValue();
 	tractUI.repaint();
-}
-
-void PinkTromboneAudioProcessorEditor::buttonClicked(Button *button) { }
-
-void PinkTromboneAudioProcessorEditor::buttonStateChanged(Button *button)
-{
-	processor.muteAudio = this->muteAudio.getToggleState();
-	processor.constrictionActive = this->constrictionActive.getToggleState();
 }

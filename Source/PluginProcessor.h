@@ -60,13 +60,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 	
 	//=== Audio Parameters
-	float tongueX = 0.0;
-	float tongueY = 0.0;
-	float constrictionX = 0.0;
-	float constrictionY = 0.0;
 	float fricativeIntensity = 0.0;
 	bool muteAudio = false;
-	bool constrictionActive = false;
 	
 	t_tractProps *getTractProps();
 
