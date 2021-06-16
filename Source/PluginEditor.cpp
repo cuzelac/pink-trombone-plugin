@@ -63,7 +63,8 @@ PinkTromboneAudioProcessorEditor::PinkTromboneAudioProcessorEditor (PinkTrombone
 	constrictionY.addListener(this);
 	
 	constrictionActive.setButtonText("Constriction Active");
-//	addAndMakeVisible(&constrictionActive);
+	addAndMakeVisible(&constrictionActive);
+	constrictionActiveAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(valueTreeState, "constrictionActive", constrictionActive));
 	constrictionActive.addListener(this);
 	
 	muteAudio.setButtonText("Mute");

@@ -45,7 +45,10 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 																"Constriction Y",
 																0.0f,
 																1.0f,
-																0.5f)
+																0.5f),
+					std::make_unique<juce::AudioParameterBool>("constrictionActive",
+															   "Constriction Active?",
+															   false)
                 })
 {
 //	addParameter (tongueX = new AudioParameterFloat ("tonguex", // parameter ID
@@ -62,6 +65,8 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
     tongueYParameter = parameters.getRawParameterValue("tongueY");
 	constrictionXParameter = parameters.getRawParameterValue("constrictionX");
 	constrictionYParameter = parameters.getRawParameterValue("constrictionY");
+	constrictionActiveParameter = parameters.getRawParameterValue("constrictionActive");
+
 	initializeTractProps(&this->tractProps, 44);
 }
 
@@ -244,7 +249,7 @@ void PinkTromboneAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 	
 	double constrictionIndex = *constrictionXParameter * (double) this->tract->getTractIndexCount();
 	double constrictionDiameter = *constrictionYParameter * (constrictionMax - constrictionMin) + constrictionMin;
-	if (this->constrictionActive == false) {
+	if (*constrictionActiveParameter == false) {
 		constrictionDiameter = constrictionMax;
 	} else {
 		this->fricativeIntensity += 0.1; // TODO ex recto

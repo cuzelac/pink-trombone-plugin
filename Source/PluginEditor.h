@@ -52,6 +52,8 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> constrictionYAttachment;
 
 	ToggleButton constrictionActive;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> constrictionActiveAttachment;
+	
 	ToggleButton muteAudio;
 	TractUI tractUI;
 
