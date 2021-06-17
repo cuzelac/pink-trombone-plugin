@@ -24,6 +24,9 @@ private:
 	double normalizedLFWaveform(double t);
 
 	AudioProcessorValueTreeState& valueTreeState;
+
+	// Parameters that live inside valueTreeState
+	std::atomic<float>* autoWobble = nullptr;
 	
 	double sampleRate;
 	double timeInWaveform;
@@ -44,8 +47,6 @@ private:
 	double intensity, loudness;
 	double vibratoAmount;
 	double vibratoFrequency;
-//	bool autoWobble; // TODO: Toggle vibrato here
-	std::atomic<float>* autoWobble = nullptr;
 	bool isTouched;
 	bool alwaysVoice;
 };
