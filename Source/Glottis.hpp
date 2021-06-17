@@ -27,11 +27,12 @@ private:
 
 	// Parameters that live inside valueTreeState
 	std::atomic<float>* autoWobble = nullptr;
+	std::atomic<float>* UIFrequency = nullptr;
 	
 	double sampleRate;
 	double timeInWaveform;
   // TODO: update frequency here? (X-axis of voicebox control)
-	double frequency, oldFrequency, newFrequency, smoothFrequency,UIFrequency;
+	double frequency, oldFrequency, newFrequency, smoothFrequency;
   // TODO: update tenseness here? (Y-axis of voicebox control)
 	double oldTenseness, newTenseness, UITenseness;
 	double waveformLength;

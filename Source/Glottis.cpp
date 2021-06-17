@@ -16,7 +16,6 @@ Glottis::Glottis(double sampleRate, AudioProcessorValueTreeState& vts) :
 	oldFrequency(140),
 	newFrequency(140),
 	smoothFrequency(140),
-	UIFrequency(140),
 	oldTenseness(0.6),
 	newTenseness(0.6),
 	UITenseness(0.6),
@@ -31,6 +30,7 @@ Glottis::Glottis(double sampleRate, AudioProcessorValueTreeState& vts) :
 	this->sampleRate = sampleRate;
 	this->setupWaveform(0);
 	this->autoWobble = vts.getRawParameterValue("autoWobble");
+	this->UIFrequency = vts.getRawParameterValue("UIFrequency");
 }
 
 void Glottis::setupWaveform(double lambda)
@@ -104,10 +104,10 @@ void Glottis::finishBlock()
 		vibrato += 0.2 * simplex1(this->totalTime * 0.98);
 		vibrato += 0.4 * simplex1(this->totalTime * 0.5);
 	}
-	if (this->UIFrequency > this->smoothFrequency)
-		this->smoothFrequency = fmin(this->smoothFrequency * 1.1, this->UIFrequency);
-	if (this->UIFrequency < this->smoothFrequency)
-		this->smoothFrequency = fmax(this->smoothFrequency / 1.1, this->UIFrequency);
+	if (*this->UIFrequency > this->smoothFrequency)
+		this->smoothFrequency = fmin(this->smoothFrequency * 1.1, (float) *this->UIFrequency);
+	if (*this->UIFrequency < this->smoothFrequency)
+		this->smoothFrequency = fmax(this->smoothFrequency / 1.1, (float) *this->UIFrequency);
 	this->oldFrequency = this->newFrequency;
 	this->newFrequency = this->smoothFrequency * (1 + vibrato);
 	this->oldTenseness = this->newTenseness;

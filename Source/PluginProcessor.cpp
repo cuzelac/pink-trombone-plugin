@@ -51,7 +51,12 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 															   false),
 					std::make_unique<juce::AudioParameterBool>("autoWobble",
 															   "Vibrato?",
-															   true)
+															   true),
+					std::make_unique<juce::AudioParameterFloat>("UIFrequency",
+																"Pitch",
+																80.0f,
+																300.0f,
+																140.0f)
                 })
 {
     tongueXParameter = parameters.getRawParameterValue("tongueX");
