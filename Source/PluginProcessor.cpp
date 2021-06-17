@@ -48,7 +48,10 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 																0.5f),
 					std::make_unique<juce::AudioParameterBool>("constrictionActive",
 															   "Constriction Active?",
-															   false)
+															   false),
+					std::make_unique<juce::AudioParameterBool>("autoWobble",
+															   "Vibrato?",
+															   true)
                 })
 {
     tongueXParameter = parameters.getRawParameterValue("tongueX");
@@ -132,7 +135,7 @@ void PinkTromboneAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 	
-	this->glottis = new Glottis(sampleRate);
+	this->glottis = new Glottis(sampleRate, parameters);
 	this->tract = new Tract(sampleRate, samplesPerBlock, &this->tractProps);
 	this->whiteNoise = new WhiteNoise(sampleRate * 2.0);
 	this->aspirateFilter = new Biquad(sampleRate);

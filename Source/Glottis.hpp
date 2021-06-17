@@ -13,7 +13,7 @@
 
 class Glottis {
 public:
-	Glottis(double sampleRate);
+	Glottis(double sampleRate, AudioProcessorValueTreeState& vts);
 	~Glottis();
 	double runStep(double lambda, double noiseSource);
 	void finishBlock();
@@ -22,6 +22,8 @@ public:
 private:
 	void setupWaveform(double lambda);
 	double normalizedLFWaveform(double t);
+
+	AudioProcessorValueTreeState& valueTreeState;
 	
 	double sampleRate;
 	double timeInWaveform;
@@ -42,7 +44,8 @@ private:
 	double intensity, loudness;
 	double vibratoAmount;
 	double vibratoFrequency;
-	bool autoWobble; // TODO: Toggle vibrato here
+//	bool autoWobble; // TODO: Toggle vibrato here
+	std::atomic<float>* autoWobble = nullptr;
 	bool isTouched;
 	bool alwaysVoice;
 };

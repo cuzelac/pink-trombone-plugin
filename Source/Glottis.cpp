@@ -10,7 +10,8 @@
 #include "noise.hpp"
 #include "util.h"
 
-Glottis::Glottis(double sampleRate) :
+Glottis::Glottis(double sampleRate, AudioProcessorValueTreeState& vts) :
+    valueTreeState(vts),
 	timeInWaveform(0),
 	oldFrequency(140),
 	newFrequency(140),
@@ -24,12 +25,12 @@ Glottis::Glottis(double sampleRate) :
 	loudness(1),
 	vibratoAmount(0.005),
 	vibratoFrequency(6),
-	autoWobble(true),
 	isTouched(false),
 	alwaysVoice(true)
 {
 	this->sampleRate = sampleRate;
 	this->setupWaveform(0);
+	this->autoWobble = vts.getRawParameterValue("autoWobble");
 }
 
 void Glottis::setupWaveform(double lambda)
@@ -98,7 +99,7 @@ void Glottis::finishBlock()
 	vibrato += this->vibratoAmount * sin(2 * M_PI * this->totalTime * this->vibratoFrequency);
 	vibrato += 0.02 * simplex1(this->totalTime * 4.07);
 	vibrato += 0.04 * simplex1(this->totalTime * 2.15);
-	if (this->autoWobble)
+	if (*this->autoWobble)
 	{
 		vibrato += 0.2 * simplex1(this->totalTime * 0.98);
 		vibrato += 0.4 * simplex1(this->totalTime * 0.5);
