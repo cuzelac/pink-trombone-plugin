@@ -56,7 +56,12 @@ PinkTromboneAudioProcessor::PinkTromboneAudioProcessor()
 																"Pitch",
 																80.0f,
 																300.0f,
-																140.0f)
+																140.0f),
+					std::make_unique<juce::AudioParameterFloat>("UITenseness",
+																"Tension",
+																0.0f,
+																1.0f,
+																0.6f)
                 })
 {
     tongueXParameter = parameters.getRawParameterValue("tongueX");

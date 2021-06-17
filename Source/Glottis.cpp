@@ -18,7 +18,6 @@ Glottis::Glottis(double sampleRate, AudioProcessorValueTreeState& vts) :
 	smoothFrequency(140),
 	oldTenseness(0.6),
 	newTenseness(0.6),
-	UITenseness(0.6),
 	totalTime(0.0),
 	intensity(0),
 	loudness(1),
@@ -31,6 +30,7 @@ Glottis::Glottis(double sampleRate, AudioProcessorValueTreeState& vts) :
 	this->setupWaveform(0);
 	this->autoWobble = vts.getRawParameterValue("autoWobble");
 	this->UIFrequency = vts.getRawParameterValue("UIFrequency");
+	this->UITenseness = vts.getRawParameterValue("UITenseness");
 }
 
 void Glottis::setupWaveform(double lambda)
@@ -90,7 +90,7 @@ double Glottis::getNoiseModulator()
 {
 	double voiced = 0.1 + 0.2 * fmax(0.0, sin(M_PI * 2 * this->timeInWaveform / this->waveformLength));
 	//return 0.3;
-	return this->UITenseness * this->intensity * voiced + (1 - this->UITenseness * this->intensity) * 0.3;
+	return *this->UITenseness * this->intensity * voiced + (1 - *this->UITenseness * this->intensity) * 0.3;
 }
 
 void Glottis::finishBlock()
@@ -111,9 +111,9 @@ void Glottis::finishBlock()
 	this->oldFrequency = this->newFrequency;
 	this->newFrequency = this->smoothFrequency * (1 + vibrato);
 	this->oldTenseness = this->newTenseness;
-	this->newTenseness = this->UITenseness +
+	this->newTenseness = *this->UITenseness +
 		0.1 * simplex1(this->totalTime * 0.46) + 0.05 * simplex1(this->totalTime * 0.36);
-	if (!this->isTouched && alwaysVoice) this->newTenseness += (3-this->UITenseness)*(1-this->intensity);
+	if (!this->isTouched && alwaysVoice) this->newTenseness += (3 - *this->UITenseness)*(1 - this->intensity);
 	
 	if (this->isTouched || alwaysVoice) this->intensity += 0.13;
 	else this->intensity -= 0.05;
@@ -141,7 +141,7 @@ double Glottis::runStep(double lambda, double noiseSource)
 		this->setupWaveform(lambda);
 	}
 	double out = this->normalizedLFWaveform(this->timeInWaveform / this->waveformLength);
-	double aspiration = this->intensity * (1 - sqrt(this->UITenseness)) * this->getNoiseModulator() * noiseSource;
+	double aspiration = this->intensity * (1 - sqrt(*this->UITenseness)) * this->getNoiseModulator() * noiseSource;
 	aspiration *= 0.2 + 0.02 * simplex1(this->totalTime * 1.99);
 	out += aspiration;
 	return out;
